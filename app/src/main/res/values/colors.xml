@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg_window">#d8e5ed</color>
+    <color name="orange_button_normal">#e97a33</color>
+    <color name="orange_button_pressed">#c36233</color>
+    <color name="red_button_normal">#be0034</color>
+    <color name="red_button_pressed">#9d0032</color>
+    <color name="text_inverted">#fff</color>
+    <color name="primary_color">#3F51B5</color>
+    <color name="primary_color_dark">#283593</color>
+    <color name="accent_color">#E91E63</color>
+    <color name="shadow_start">#c1696969</color>
+    <color name="shadow_center">#6f696969</color>
+    <color name="shadow_end">#00696969</color>
+    <color name="body_text">#2f2f2f</color>
+</resources>

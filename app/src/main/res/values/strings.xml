@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Nanodegree</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="lbl_main_screen_title">My Nanodegree Apps!</string>
+    <string name="lbl_spotify_streamer">Spotify Streamer</string>
+    <string name="lbl_scores_app">Scores App</string>
+    <string name="lbl_library_app">Library App</string>
+    <string name="lbl_build_it_biggre">Build It Bigger</string>
+    <string name="lbl_xyz_reader">XYZ Reader</string>
+    <string name="lbl_capstone">Capstone: My Own App</string>
+    <string name="title_activity_spotify">Spotify Streamer</string>
+    <string name="hint_search_for_artist">Artist name</string>
+    <string name="title_activity_spotify_tracks">Top 10 Tracks</string>
+    <string name="default_country">US</string>
+    <string name="key_country">pref_spotify_country</string>
+    <string name="settings_spotify_country">Country</string>
+    <string name="settings_spotify_country_summary">ISO code of the country</string>
+    <string name="title_settings">Settings</string>
+    <string name="refine_search">Please refine your search</string>
+    <string name="no_network_error">Can not connect to Spotify server. Please check your connection and try again.</string>
+    <string name="unknown_error">Unknown error. Please try again later.</string>
+    <string name="lbl_no_tracks">Artist doesn\'t have top tracks</string>
+</resources>

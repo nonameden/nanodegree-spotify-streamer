@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="track"
+            type="nz.co.nonameden.spotifystreamer.infrastructure.models.TrackViewModel"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?android:listPreferredItemHeightLarge"
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="?android:listPreferredItemHeightLarge"
+            android:layout_height="?android:listPreferredItemHeightLarge"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            tools:background="#666"
+            app:image="@{track.smallImageUrl}"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/default_space"
+            android:layout_marginRight="@dimen/default_space"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/track_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:text="@{track.name}"
+                tools:text="Artist name"/>
+
+            <TextView
+                android:id="@+id/album_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:text="@{track.albumName}"
+                tools:text="Album name"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</layout>
