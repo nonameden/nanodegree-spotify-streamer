@@ -2,6 +2,6 @@
 <fragment
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/spotify_search"
-    android:name="nz.co.nonameden.spotifystreamer.ui.spotify.SpotifySearchFragment"
+    android:name="nz.co.nonameden.spotifystreamer.ui.SpotifySearchFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
