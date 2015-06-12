@@ -10,10 +10,11 @@
             type="nz.co.nonameden.spotifystreamer.infrastructure.models.ArtistViewModel"/>
     </data>
 
-    <LinearLayout
+    <nz.co.nonameden.spotifystreamer.ui.widgets.CheckableLinearLayout
         android:layout_width="match_parent"
         android:layout_height="?android:listPreferredItemHeightLarge"
         android:orientation="horizontal"
+        android:background="@drawable/bg_list_item"
         tools:ignore="UseCompoundDrawables">
 
         <ImageView
@@ -38,5 +39,5 @@
             android:textAppearance="?android:textAppearanceMedium"
             tools:text="Artist name"/>
 
-    </LinearLayout>
+    </nz.co.nonameden.spotifystreamer.ui.widgets.CheckableLinearLayout>
 </layout>

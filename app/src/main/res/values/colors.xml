@@ -13,4 +13,5 @@
     <color name="shadow_center">#6f696969</color>
     <color name="shadow_end">#00696969</color>
     <color name="body_text">#2f2f2f</color>
+    <color name="lighter_gray">#a6aaaaaa</color>
 </resources>

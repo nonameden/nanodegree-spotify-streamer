@@ -10,7 +10,7 @@ import nz.co.nonameden.spotifystreamer.ui.base.BaseActivity;
 /**
  * Created by nonameden on 6/06/15.
  */
-public class SpotifySettingsActivity extends BaseActivity {
+public class SettingsActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

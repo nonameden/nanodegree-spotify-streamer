@@ -20,6 +20,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.InjectView;
+import butterknife.OnItemClick;
 import nz.co.nonameden.spotifystreamer.R;
 import nz.co.nonameden.spotifystreamer.infrastructure.adapters.ArtistListAdapter;
 import nz.co.nonameden.spotifystreamer.infrastructure.loaders.AbsNetworkLoader;
@@ -33,8 +35,8 @@ import retrofit.RetrofitError;
 /**
  * Created by nonameden on 3/06/15.
  */
-public class SpotifySearchFragment extends BaseFragment<SpotifySearchFragment.SpotifySearchCallback>
-        implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<List<ArtistViewModel>>, AbsNetworkLoader.ErrorCallback {
+public class ArtistSearchFragment extends BaseFragment<ArtistSearchFragment.Callback>
+        implements LoaderManager.LoaderCallbacks<List<ArtistViewModel>>, AbsNetworkLoader.ErrorCallback {
 
     private static final String ARG_SEARCH_RESULTS = "arg-search-results";
     private static final String ARG_SEARCH_QUERY = "arg-search-query";
@@ -42,14 +44,16 @@ public class SpotifySearchFragment extends BaseFragment<SpotifySearchFragment.Sp
     private static final int LOADER_ARTIST_SEARCH = 100;
     private static final long CHARACTER_WAIT_MS = 200; // ms
 
+    @InjectView(R.id.search_query) EditText mSearchView;
+    @InjectView(R.id.list) ListView mListView;
+    @InjectView(R.id.shadow) View mShadowView;
+    @InjectView(R.id.content) View mContentView;
+    @InjectView(R.id.progress) View mProgressView;
+
     private final Handler mHandler = new Handler();
-    private EditText mSearchView;
-    private ListView mListView;
     private ArtistListAdapter mAdapter;
     private String mLastSearchQuery;
-    private View mShadowView;
-    private View mContentView;
-    private View mProgressView;
+    private boolean mIsTablet;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,23 +70,18 @@ public class SpotifySearchFragment extends BaseFragment<SpotifySearchFragment.Sp
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_spotify_search, container, false);
+        return inflater.inflate(R.layout.fragment_artist_search, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mSearchView = (EditText) view.findViewById(R.id.search_query);
         mSearchView.addTextChangedListener(mSearchQueryListener);
-        mShadowView = view.findViewById(R.id.shadow);
-        mListView = (ListView) view.findViewById(R.id.list);
         mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(this);
         mListView.setOnScrollListener(mScrollListener);
+        setTabletMode(mIsTablet);
 
-        mContentView = view.findViewById(R.id.content);
-        mProgressView = view.findViewById(R.id.progress);
         UiUtils.crossfadeViews(mContentView, mProgressView, false);
     }
 
@@ -154,14 +153,14 @@ public class SpotifySearchFragment extends BaseFragment<SpotifySearchFragment.Sp
     }
 
     @Override
-    protected SpotifySearchCallback initStubCallback() {
-        return new SpotifySearchCallback() {
+    protected Callback initStubCallback() {
+        return new Callback() {
             @Override
             public void onArtistClicked(ArtistViewModel artist) {}
         };
     }
 
-    @Override
+    @OnItemClick(R.id.list)
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         ArtistViewModel artist = mAdapter.getItem(position);
         getCallback().onArtistClicked(artist);
@@ -194,7 +193,14 @@ public class SpotifySearchFragment extends BaseFragment<SpotifySearchFragment.Sp
         Toast.makeText(getActivity(), errorText, Toast.LENGTH_SHORT).show();
     }
 
-    public interface SpotifySearchCallback {
+    public void setTabletMode(boolean isTablet) {
+        mIsTablet = isTablet;
+        if(mListView!=null) {
+            mListView.setChoiceMode(isTablet ? ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
+        }
+    }
+
+    public interface Callback {
         void onArtistClicked(ArtistViewModel artist);
     }
 }

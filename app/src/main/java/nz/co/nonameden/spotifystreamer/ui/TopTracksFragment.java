@@ -7,12 +7,15 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.InjectView;
+import butterknife.OnItemClick;
 import nz.co.nonameden.spotifystreamer.R;
 import nz.co.nonameden.spotifystreamer.infrastructure.adapters.TrackListAdapter;
 import nz.co.nonameden.spotifystreamer.infrastructure.loaders.AbsNetworkLoader;
@@ -26,7 +29,7 @@ import retrofit.RetrofitError;
 /**
  * Created by nonameden on 6/06/15.
  */
-public class SpotifyTopTracksFragment extends BaseFragment<SpotifyTopTracksFragment.Callback>
+public class TopTracksFragment extends BaseFragment<TopTracksFragment.Callback>
         implements LoaderManager.LoaderCallbacks<List<TrackViewModel>>,AbsNetworkLoader.ErrorCallback {
 
     private static final String ARG_ARTIST_ID = "arg-artist-id";
@@ -34,11 +37,13 @@ public class SpotifyTopTracksFragment extends BaseFragment<SpotifyTopTracksFragm
 
     private static final int LOADER_TOP_TRACKS = 200;
 
+    @InjectView(R.id.list) ListView mListView;
+    @InjectView(R.id.empty_view) View mEmptyView;
+    @InjectView(R.id.progress) View mProgressView;
+
     private String mArtistId;
     private TrackListAdapter mAdapter;
-    private ListView mListView;
-    private View mEmptyView;
-    private View mProgressView;
+    private boolean mIsTablet;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,21 +60,17 @@ public class SpotifyTopTracksFragment extends BaseFragment<SpotifyTopTracksFragm
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_spotify_top_songs, container, false);
+        return inflater.inflate(R.layout.fragment_top_songs, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mEmptyView = view.findViewById(R.id.empty_view);
         mEmptyView.setVisibility(View.GONE);
-
-        mListView = (ListView) view.findViewById(R.id.list);
         mListView.setAdapter(mAdapter);
-        mProgressView = view.findViewById(R.id.progress);
 
-        if(mAdapter.getCount() == 0) {
+        if(mAdapter.getCount() == 0 && !mIsTablet) {
             UiUtils.crossfadeViews(mProgressView, mListView, false);
         } else {
             UiUtils.crossfadeViews(mListView, mProgressView, false);
@@ -125,6 +126,19 @@ public class SpotifyTopTracksFragment extends BaseFragment<SpotifyTopTracksFragm
     public void onNetworkError(RetrofitError error) {
         String errorText = RetrofitHelper.getErrorText(getActivity(), error);
         Toast.makeText(getActivity(), errorText, Toast.LENGTH_SHORT).show();
+    }
+
+    public void setTabletMode(boolean isTablet) {
+        mIsTablet = isTablet;
+        if(mProgressView!=null && mProgressView.getVisibility() == View.VISIBLE) {
+            UiUtils.crossfadeViews(mListView, mProgressView, false);
+        }
+    }
+
+    @OnItemClick(R.id.list)
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        TrackViewModel track = mAdapter.getItem(position);
+        getCallback().onTrackClicked(track);
     }
 
     public interface Callback {

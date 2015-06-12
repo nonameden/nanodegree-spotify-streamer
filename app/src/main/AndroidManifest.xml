@@ -10,7 +10,7 @@
         android:label="@string/title_activity_spotify"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".ui.SpotifySearchActivity"
+            android:name=".ui.ArtistSearchActivity"
             android:label="@string/title_activity_spotify" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,24 +19,29 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.SpotifyTopTracksActivity"
+            android:name=".ui.TopTracksActivity"
             android:label="@string/title_activity_spotify_tracks"
-            android:parentActivityName=".ui.SpotifySearchActivity">
+            android:parentActivityName=".ui.ArtistSearchActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.SpotifySearchActivity" />
+                android:value=".ui.ArtistSearchActivity" />
         </activity>
 
         <activity
-            android:name=".ui.SpotifySettingsActivity"
+            android:name=".ui.SettingsActivity"
             android:label="@string/title_settings"
-            android:parentActivityName=".ui.SpotifySearchActivity">
+            android:parentActivityName=".ui.ArtistSearchActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.SpotifySearchActivity" />
+                android:value=".ui.ArtistSearchActivity" />
         </activity>
+
+        <activity
+            android:name=".ui.PlayerActivity"
+            android:label="@string/title_player"/>
+
     </application>
 
 </manifest>

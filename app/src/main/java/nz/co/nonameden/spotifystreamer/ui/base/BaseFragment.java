@@ -2,6 +2,10 @@ package nz.co.nonameden.spotifystreamer.ui.base;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.os.Bundle;
+import android.view.View;
+
+import butterknife.ButterKnife;
 
 /**
  * Created by nonameden on 3/06/15.
@@ -31,6 +35,12 @@ public abstract class BaseFragment<T> extends Fragment {
                     + getClass().getSimpleName(), e
             );
         }
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ButterKnife.inject(this, view);
     }
 
     @Override

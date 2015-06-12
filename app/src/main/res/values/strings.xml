@@ -22,4 +22,5 @@
     <string name="no_network_error">Can not connect to Spotify server. Please check your connection and try again.</string>
     <string name="unknown_error">Unknown error. Please try again later.</string>
     <string name="lbl_no_tracks">Artist doesn\'t have top tracks</string>
+    <string name="title_player">Player</string>
 </resources>
