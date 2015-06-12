@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
@@ -76,5 +77,14 @@ public class ArtistViewModel implements Parcelable {
                 .load(url)
                 .placeholder(new ColorDrawable(Color.GRAY))
                 .into(view);
+    }
+
+    @Override
+    public boolean equals(@NonNull Object o) {
+        if(o instanceof ArtistViewModel) {
+            ArtistViewModel other = (ArtistViewModel) o;
+            return mId.equals(other.mId);
+        }
+        return false;
     }
 }

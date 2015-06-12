@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 
+import java.util.ArrayList;
+
 import nz.co.nonameden.spotifystreamer.R;
 import nz.co.nonameden.spotifystreamer.infrastructure.models.ArtistViewModel;
 import nz.co.nonameden.spotifystreamer.infrastructure.models.TrackViewModel;
@@ -40,14 +42,17 @@ public class TopTracksActivity extends BaseActivity
     }
 
     @Override
-    public void onTrackClicked(TrackViewModel track) {
+    public void onTrackClicked(ArrayList<TrackViewModel> tracks, int position) {
         Intent intent = new Intent(this, PlayerActivity.class);
+        intent.putExtra(PlayerActivity.EXTRA_ARTIST, mArtist);
+        intent.putExtra(PlayerActivity.EXTRA_TRACKS, tracks);
+        intent.putExtra(PlayerActivity.EXTRA_CURRENT_TRACK, position);
         startActivity(intent);
     }
 
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        overridePendingTransition(R.anim.slide_in_right, android.R.anim.slide_out_right);
     }
 }

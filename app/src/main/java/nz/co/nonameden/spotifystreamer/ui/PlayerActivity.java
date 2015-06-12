@@ -11,6 +11,12 @@ import nz.co.nonameden.spotifystreamer.ui.base.BaseActivity;
  */
 public class PlayerActivity extends BaseActivity {
 
+    public static final String EXTRA_ARTIST = PlayerFragment.ARG_ARTIST;
+    public static final String EXTRA_TRACKS = PlayerFragment.ARG_TRACKS;
+    public static final String EXTRA_CURRENT_TRACK = PlayerFragment.ARG_CURRENT_TRACK;
+
+    private PlayerFragment mPlayerFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,6 +25,16 @@ public class PlayerActivity extends BaseActivity {
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        if(savedInstanceState == null) {
+            mPlayerFragment = new PlayerFragment();
+            mPlayerFragment.setArguments(getIntent().getExtras());
+            getFragmentManager().beginTransaction()
+                    .add(R.id.content, mPlayerFragment)
+                    .commit();
+        } else {
+            mPlayerFragment = (PlayerFragment) getFragmentManager().findFragmentById(R.id.content);
         }
     }
 }

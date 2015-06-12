@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/album_art"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/media_controller"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        tools:background="@android:color/darker_gray"
+        tools:src="@mipmap/ic_launcher"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/album_art"
+        android:background="@drawable/dark_top_shadow"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_space_quarter"
+            android:layout_marginTop="@dimen/default_space"
+            android:gravity="center"
+            android:textAppearance="?android:textAppearanceLargeInverse"
+            tools:text="Artist name"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_space"
+            android:gravity="center"
+            android:textAppearance="?android:textAppearanceMediumInverse"
+            tools:text="Track name"/>
+
+    </LinearLayout>
+
+    <MediaController
+        android:id="@+id/media_controller"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"/>
+
+</RelativeLayout>
