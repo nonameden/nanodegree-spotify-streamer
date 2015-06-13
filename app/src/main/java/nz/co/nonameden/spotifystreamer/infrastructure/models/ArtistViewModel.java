@@ -8,7 +8,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import kaaes.spotify.webapi.android.models.Artist;
 import nz.co.nonameden.spotifystreamer.infrastructure.shared.Constants;
@@ -73,7 +73,7 @@ public class ArtistViewModel implements Parcelable {
 
     @BindingAdapter({"bind:image"})
     public static void loadImage(ImageView view, String url) {
-        Picasso.with(view.getContext())
+        Glide.with(view.getContext())
                 .load(url)
                 .placeholder(new ColorDrawable(Color.GRAY))
                 .into(view);

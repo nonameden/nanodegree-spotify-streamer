@@ -14,11 +14,12 @@ public class PlayerActivity extends BaseActivity {
     public static final String EXTRA_ARTIST = PlayerFragment.ARG_ARTIST;
     public static final String EXTRA_TRACKS = PlayerFragment.ARG_TRACKS;
     public static final String EXTRA_CURRENT_TRACK = PlayerFragment.ARG_CURRENT_TRACK;
+    public static final String EXTRA_CURRENT_MEDIA_DESCRIPTION = "extra-media-description";
 
     private PlayerFragment mPlayerFragment;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
 

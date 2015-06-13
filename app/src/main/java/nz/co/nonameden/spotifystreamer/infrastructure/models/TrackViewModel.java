@@ -7,7 +7,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import kaaes.spotify.webapi.android.models.AlbumSimple;
 import kaaes.spotify.webapi.android.models.Track;
@@ -99,7 +99,7 @@ public class TrackViewModel implements Parcelable {
 
     @BindingAdapter({"bind:image"})
     public static void loadImage(ImageView view, String url) {
-        Picasso.with(view.getContext())
+        Glide.with(view.getContext())
                 .load(url)
                 .placeholder(new ColorDrawable(Color.GRAY))
                 .into(view);

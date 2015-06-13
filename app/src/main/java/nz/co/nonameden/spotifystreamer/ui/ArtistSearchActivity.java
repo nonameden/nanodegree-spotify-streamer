@@ -20,7 +20,7 @@ public class ArtistSearchActivity extends BaseActivity
     private ArtistViewModel mArtist;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_artist_search);
 
@@ -71,7 +71,6 @@ public class ArtistSearchActivity extends BaseActivity
             Intent intent = new Intent(this, TopTracksActivity.class);
             intent.putExtra(TopTracksActivity.EXTRA_ARTIST, artist);
             startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
         } else {
             tracksFragment.setArtistId(artist.getId());
         }

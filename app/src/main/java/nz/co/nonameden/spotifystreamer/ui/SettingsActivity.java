@@ -13,7 +13,7 @@ import nz.co.nonameden.spotifystreamer.ui.base.BaseActivity;
 public class SettingsActivity extends BaseActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.spotify_settings);
