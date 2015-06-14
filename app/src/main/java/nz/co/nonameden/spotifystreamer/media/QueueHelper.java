@@ -27,6 +27,7 @@ public class QueueHelper {
     }
 
     public static ConverterState convertToQueue(Bundle bundle) {
+        bundle.setClassLoader(ArtistViewModel.class.getClassLoader());
         if(bundle.containsKey(EXTRA_ARTIST) && bundle.containsKey(EXTRA_TRACKS)) {
             ArtistViewModel artist = bundle.getParcelable(EXTRA_ARTIST);
             ArrayList<TrackViewModel> tracks = bundle.getParcelableArrayList(EXTRA_TRACKS);
