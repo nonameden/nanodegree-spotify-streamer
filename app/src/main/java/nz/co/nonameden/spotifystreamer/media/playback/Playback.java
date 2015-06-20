@@ -100,6 +100,8 @@ public interface Playback {
      */
     String getCurrentMediaId();
 
+    long getDuration();
+
     interface Callback {
         /**
          * On current music completed.

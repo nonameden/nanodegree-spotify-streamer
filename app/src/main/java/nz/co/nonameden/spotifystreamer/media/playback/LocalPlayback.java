@@ -160,7 +160,7 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
         } else {
             mState = PlaybackStateCompat.STATE_STOPPED;
             relaxResources(false); // release everything except MediaPlayer
-            MediaMetadataCompat track = mService.getTrack(item.getDescription().getMediaId());
+            MediaMetadataCompat track = mService.getTrack(mCurrentMediaId);
             if(track == null) return;
 
             String source = track.getString(QueueHelper.CUSTOM_METADATA_TRACK_SOURCE);
@@ -251,6 +251,11 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
         return mCurrentMediaId;
     }
 
+    @Override
+    public long getDuration() {
+        return mMediaPlayer.getDuration();
+    }
+
     /**
      * Try to get the system audio focus.
      */
@@ -313,6 +318,7 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
                 mPlayOnFocusGain = false;
             }
         }
+
         if (mCallback != null) {
             mCallback.onPlaybackStatusChanged(mState);
         }

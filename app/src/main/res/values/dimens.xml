@@ -6,4 +6,6 @@
     <dimen name="default_space_half">8dp</dimen>
     <dimen name="default_space_quarter">4dp</dimen>
     <dimen name="negative_default_space">-16dp</dimen>
+    <dimen name="min_tap_area">48dp</dimen>
+    <dimen name="default_space_quadruple">64dp</dimen>
 </resources>

@@ -1,13 +1,7 @@
 package nz.co.nonameden.spotifystreamer.infrastructure.models;
 
-import android.databinding.BindingAdapter;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
 
 import kaaes.spotify.webapi.android.models.AlbumSimple;
 import kaaes.spotify.webapi.android.models.Track;
@@ -95,13 +89,5 @@ public class TrackViewModel implements Parcelable {
 
     public String getPreviewUrl() {
         return mPreviewUrl;
-    }
-
-    @BindingAdapter({"bind:image"})
-    public static void loadImage(ImageView view, String url) {
-        Glide.with(view.getContext())
-                .load(url)
-                .placeholder(new ColorDrawable(Color.GRAY))
-                .into(view);
     }
 }

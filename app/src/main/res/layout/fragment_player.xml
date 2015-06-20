@@ -1,49 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/album_art"
+    <data>
+
+        <import type="android.view.View"/>
+
+        <import type="android.support.v4.media.session.PlaybackStateCompat"/>
+
+        <variable
+            name="track"
+            type="nz.co.nonameden.spotifystreamer.infrastructure.models.NowPlayingViewModel"/>
+    </data>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/media_controller"
-        android:contentDescription="@null"
-        android:scaleType="centerCrop"
-        tools:background="@android:color/darker_gray"
-        tools:src="@mipmap/ic_launcher"/>
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/album_art"
-        android:background="@drawable/dark_top_shadow"
-        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/album_art"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            app:image="@{track.albumArtUrl}"
+            tools:background="@android:color/darker_gray"
+            tools:src="@mipmap/ic_launcher"/>
 
-        <TextView
+        <View
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignTop="@+id/artist_name"
+            android:background="@drawable/dark_top_shadow"/>
+
+        <TextView
+            android:id="@+id/artist_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/track_name"
             android:layout_marginBottom="@dimen/default_space_quarter"
-            android:layout_marginTop="@dimen/default_space"
             android:gravity="center"
-            android:textAppearance="?android:textAppearanceLargeInverse"
+            android:paddingTop="@dimen/default_space_quadruple"
+            android:text="@{track.artistName}"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="?android:attr/textColorPrimaryInverse"
             tools:text="Artist name"/>
 
         <TextView
+            android:id="@+id/track_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_above="@+id/seek_control"
             android:layout_marginBottom="@dimen/default_space"
             android:gravity="center"
-            android:textAppearance="?android:textAppearanceMediumInverse"
+            android:text="@{track.trackName}"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="?android:attr/textColorPrimaryInverse"
             tools:text="Track name"/>
 
-    </LinearLayout>
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/default_space"
+            android:visibility="@{track.loadingInProgress ? View.VISIBLE : View.INVISIBLE}"/>
 
-    <MediaController
-        android:id="@+id/media_controller"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"/>
+        <RelativeLayout
+            android:id="@+id/seek_control"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/min_tap_area"
+            android:layout_above="@+id/play_controls"
+            android:visibility="@{!track.loadingInProgress ? View.VISIBLE : View.INVISIBLE}">
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/start_text"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="@dimen/default_space"
+                android:layout_marginStart="@dimen/default_space"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="@{track.currentTime}"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="?android:attr/textColorPrimaryInverse"
+                tools:text="0:00"/>
+
+            <SeekBar
+                android:id="@+id/seek_bar"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/default_space_quarter"
+                android:layout_marginRight="@dimen/default_space_quarter"
+                android:layout_toEndOf="@+id/start_text"
+                android:layout_toLeftOf="@+id/end_text"
+                android:layout_toRightOf="@+id/start_text"
+                android:layout_toStartOf="@+id/end_text"
+                android:max="@{track.totalTimeMs}"
+                android:progress="@{track.currentTimeMs}"/>
+
+            <TextView
+                android:id="@+id/end_text"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignWithParentIfMissing="true"
+                android:layout_marginEnd="@dimen/default_space"
+                android:layout_marginRight="@dimen/default_space"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="@{track.totalTime}"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="?android:attr/textColorPrimaryInverse"
+                tools:text="1:99"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/play_controls"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/min_tap_area"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/default_space"
+            android:visibility="@{!track.loadingInProgress ? View.VISIBLE : View.INVISIBLE}">
+
+            <ImageView
+                android:id="@+id/prev"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?android:selectableItemBackground"
+                android:contentDescription="@null"
+                android:src="@android:drawable/ic_media_previous"
+                android:visibility="@{track.skipPreviousVisible ? View.VISIBLE : View.INVISIBLE}"/>
+
+            <ImageView
+                android:id="@+id/play_pause"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?android:selectableItemBackground"
+                android:contentDescription="@null"
+                android:src="@{track.playing ? @android:drawable/ic_media_pause : @android:drawable/ic_media_play}"
+                tools:src="@android:drawable/ic_media_pause"/>
+
+            <ImageView
+                android:id="@+id/next"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?android:selectableItemBackground"
+                android:contentDescription="@null"
+                android:src="@android:drawable/ic_media_next"
+                android:visibility="@{track.skipNextVisible ? View.VISIBLE : View.INVISIBLE}"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</layout>

@@ -44,6 +44,12 @@ public abstract class BaseFragment<T> extends Fragment {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
 

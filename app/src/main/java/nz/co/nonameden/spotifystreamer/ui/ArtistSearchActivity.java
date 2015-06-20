@@ -87,9 +87,9 @@ public class ArtistSearchActivity extends BaseActivity
     @Override
     public void onTrackClicked(ArrayList<TrackViewModel> tracks, int position) {
         Intent intent = new Intent(this, PlayerActivity.class);
-        intent.putExtra(PlayerActivity.EXTRA_ARTIST, mArtist);
-        intent.putExtra(PlayerActivity.EXTRA_TRACKS, tracks);
-        intent.putExtra(PlayerActivity.EXTRA_CURRENT_TRACK, position);
+//        intent.putExtra(PlayerActivity.EXTRA_ARTIST, mArtist);
+//        intent.putExtra(PlayerActivity.EXTRA_TRACKS, tracks);
+//        intent.putExtra(PlayerActivity.EXTRA_CURRENT_TRACK, position);
         startActivity(intent);
     }
 }

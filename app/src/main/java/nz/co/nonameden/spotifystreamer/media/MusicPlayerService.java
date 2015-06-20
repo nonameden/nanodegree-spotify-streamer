@@ -158,6 +158,7 @@ public class MusicPlayerService extends MediaBrowserServiceCompat implements Pla
 
     @Override
     public void onPlaybackStatusChanged(int state) {
+        updateDuration();
         updatePlaybackState(null);
     }
 
@@ -392,6 +393,21 @@ public class MusicPlayerService extends MediaBrowserServiceCompat implements Pla
         if (state == PlaybackStateCompat.STATE_PLAYING || state == PlaybackStateCompat.STATE_PAUSED) {
             mMediaNotificationManager.startNotification();
         }
+    }
+
+    private void updateDuration() {
+        MediaSessionCompat.QueueItem queueItem = mPlayingQueue.get(mCurrentIndexOnQueue);
+        final String trackId = queueItem.getDescription().getMediaId();
+        MediaMetadataCompat track = getTrack(trackId);
+        if (track == null) {
+            throw new IllegalArgumentException("Invalid musicId " + trackId);
+        }
+
+        track = new MediaMetadataCompat.Builder(track)
+                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, mPlayback.getDuration())
+                .build();
+        mTracksMap.put(trackId, track);
+        mSession.setMetadata(track);
     }
 
     private long getAvailableActions() {

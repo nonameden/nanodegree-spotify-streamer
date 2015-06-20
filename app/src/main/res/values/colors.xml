@@ -9,7 +9,7 @@
     <color name="primary_color">#3F51B5</color>
     <color name="primary_color_dark">#283593</color>
     <color name="accent_color">#E91E63</color>
-    <color name="dark_shadow_start">#c1353535</color>
+    <color name="dark_shadow_start">#000000</color>
     <color name="shadow_start">#c1696969</color>
     <color name="shadow_center">#6f696969</color>
     <color name="shadow_end">#00696969</color>
