@@ -33,6 +33,8 @@ import nz.co.nonameden.spotifystreamer.ui.base.BaseFragment;
  */
 public class PlayerFragment extends BaseFragment<MediaProvider> {
 
+    private static final String ARG_VIEW_MODEL = "arg-view-model";
+
     private static final long PROGRESS_UPDATE_INTERNAL = 1000;
     private static final long PROGRESS_UPDATE_INITIAL_INTERVAL = 100;
 
@@ -50,7 +52,11 @@ public class PlayerFragment extends BaseFragment<MediaProvider> {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = new NowPlayingViewModel();
+        if(savedInstanceState == null) {
+            mViewModel = new NowPlayingViewModel();
+        } else {
+            mViewModel = savedInstanceState.getParcelable(ARG_VIEW_MODEL);
+        }
     }
 
     @Nullable
@@ -108,8 +114,16 @@ public class PlayerFragment extends BaseFragment<MediaProvider> {
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(ARG_VIEW_MODEL, mViewModel);
+    }
+
     private void onMetadataChanged(MediaMetadataCompat metadata) {
-        mViewModel.updateFromMetadata(metadata);
+        if(metadata != null) {
+            mViewModel.updateFromMetadata(metadata);
+        }
     }
 
     private void onPlaybackStateChanged(PlaybackStateCompat playbackState) {
@@ -174,7 +188,9 @@ public class PlayerFragment extends BaseFragment<MediaProvider> {
         }
 
         @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {}
+        public void onStartTrackingTouch(SeekBar seekBar) {
+            stopSeekBarUpdate();
+        }
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {

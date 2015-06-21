@@ -2,6 +2,9 @@ package nz.co.nonameden.spotifystreamer.infrastructure.models;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 
@@ -11,7 +14,7 @@ import nz.co.nonameden.spotifystreamer.infrastructure.utils.MediaUtils;
 /**
  * Created by nonameden on 20/06/15.
  */
-public class NowPlayingViewModel extends BaseObservable {
+public class NowPlayingViewModel extends BaseObservable implements Parcelable {
 
     private String mArtistName;
     private String mTrackName;
@@ -19,6 +22,30 @@ public class NowPlayingViewModel extends BaseObservable {
     private int mTotalTime;
     private String mAlbumArtUrl;
     private PlaybackStateCompat mPlaybackState;
+
+    public NowPlayingViewModel() {
+    }
+
+    protected NowPlayingViewModel(Parcel in) {
+        mArtistName = in.readString();
+        mTrackName = in.readString();
+        mCurrentTime = in.readInt();
+        mTotalTime = in.readInt();
+        mAlbumArtUrl = in.readString();
+        mPlaybackState = in.readParcelable(PlaybackStateCompat.class.getClassLoader());
+    }
+
+    public static final Creator<NowPlayingViewModel> CREATOR = new Creator<NowPlayingViewModel>() {
+        @Override
+        public NowPlayingViewModel createFromParcel(Parcel in) {
+            return new NowPlayingViewModel(in);
+        }
+
+        @Override
+        public NowPlayingViewModel[] newArray(int size) {
+            return new NowPlayingViewModel[size];
+        }
+    };
 
     @Bindable
     public String getArtistName() {
@@ -67,7 +94,7 @@ public class NowPlayingViewModel extends BaseObservable {
         notifyPropertyChanged(BR.loadingInProgress);
     }
 
-    public void updateFromMetadata(MediaMetadataCompat metadata) {
+    public void updateFromMetadata(@NonNull MediaMetadataCompat metadata) {
         mArtistName = metadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST);
         mTrackName = metadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE);
         mAlbumArtUrl = metadata.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI);
@@ -101,5 +128,20 @@ public class NowPlayingViewModel extends BaseObservable {
     @Bindable
     public boolean isLoadingInProgress() {
         return mPlaybackState == null || (mPlaybackState.getState() >= PlaybackStateCompat.STATE_BUFFERING);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mArtistName);
+        dest.writeString(mTrackName);
+        dest.writeInt(mCurrentTime);
+        dest.writeInt(mTotalTime);
+        dest.writeString(mAlbumArtUrl);
+        dest.writeParcelable(mPlaybackState, flags);
     }
 }

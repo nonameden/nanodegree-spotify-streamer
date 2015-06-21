@@ -10,6 +10,7 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import butterknife.ButterKnife;
 import nz.co.nonameden.spotifystreamer.media.MusicPlayerService;
 import nz.co.nonameden.spotifystreamer.media.compat.MediaBrowserCompat;
 import nz.co.nonameden.spotifystreamer.media.compat.MediaProvider;
@@ -28,6 +29,13 @@ public abstract class BaseActivity extends AppCompatActivity implements MediaPro
 
         mMediaBrowser = new MediaBrowserCompat(this,
                 new ComponentName(this, MusicPlayerService.class), mConnectionCallback, null);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        ButterKnife.inject(this);
     }
 
     @Override

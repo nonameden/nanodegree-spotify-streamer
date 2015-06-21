@@ -2,7 +2,12 @@ package nz.co.nonameden.spotifystreamer.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import nz.co.nonameden.spotifystreamer.R;
 import nz.co.nonameden.spotifystreamer.ui.base.BaseActivity;
 
@@ -11,32 +16,40 @@ import nz.co.nonameden.spotifystreamer.ui.base.BaseActivity;
  */
 public class PlayerActivity extends BaseActivity {
 
-//    public static final String EXTRA_ARTIST = PlayerFragment.ARG_ARTIST;
-//    public static final String EXTRA_TRACKS = PlayerFragment.ARG_TRACKS;
-//    public static final String EXTRA_CURRENT_TRACK = PlayerFragment.ARG_CURRENT_TRACK;
     public static final String EXTRA_CURRENT_MEDIA_DESCRIPTION = "extra-media-description";
 
+    @InjectView(R.id.toolbar)
+    Toolbar mToolbar;
+
     private PlayerFragment mPlayerFragment;
+    private ShareActionProvider mShareActionProvider;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
+        ButterKnife.inject(this);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        setSupportActionBar(mToolbar);
 
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar!=null) {
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
         }
 
-        if(savedInstanceState == null) {
-            mPlayerFragment = new PlayerFragment();
-            mPlayerFragment.setArguments(getIntent().getExtras());
-            getFragmentManager().beginTransaction()
-                    .add(R.id.content, mPlayerFragment)
-                    .commit();
-        } else {
-            mPlayerFragment = (PlayerFragment) getFragmentManager().findFragmentById(R.id.content);
-        }
+        mPlayerFragment = (PlayerFragment) getFragmentManager().findFragmentById(R.id.player);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_share, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

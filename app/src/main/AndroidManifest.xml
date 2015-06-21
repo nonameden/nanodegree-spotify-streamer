@@ -43,7 +43,8 @@
 
         <activity
             android:name=".ui.PlayerActivity"
-            android:label="@string/title_player"/>
+            android:label="@string/title_player"
+            android:theme="@style/AppTheme.Fullscreen"/>
 
         <service
             android:name=".media.MusicPlayerService"
