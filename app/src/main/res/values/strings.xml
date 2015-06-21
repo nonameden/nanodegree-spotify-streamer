@@ -29,4 +29,5 @@
     <string name="label_next">Next</string>
     <string name="error_no_metadata">Unable to retrieve metadata.</string>
     <string name="action_share">Share</string>
+    <string name="title_share_with">Share with…</string>
 </resources>

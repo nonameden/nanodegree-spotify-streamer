@@ -19,6 +19,7 @@ import nz.co.nonameden.spotifystreamer.infrastructure.models.TrackViewModel;
 public class QueueHelper {
 
     public static final String CUSTOM_METADATA_TRACK_SOURCE = "__SOURCE__";
+    public static final String CUSTOM_METADATA_SPOTIFY_URL = "__SPOTIFY_URL__";
     public static final String EXTRA_ARTIST = "extra-artist";
     public static final String EXTRA_TRACKS = "extra-tracks";
 
@@ -52,6 +53,7 @@ public class QueueHelper {
                     .putString(MediaMetadataCompat.METADATA_KEY_TITLE, track.getName())
                     .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, track.getAlbumName())
                     .putString(CUSTOM_METADATA_TRACK_SOURCE, track.getPreviewUrl())
+                    .putString(CUSTOM_METADATA_SPOTIFY_URL, track.getSpotifyUrl())
                     .build();
             metadataMap.put(track.getId(), mediaMetadata);
             itemList.add(new MediaSessionCompat.QueueItem(mediaMetadata.getDescription(), count++));

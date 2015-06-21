@@ -19,6 +19,7 @@ public class TrackViewModel implements Parcelable {
     private final String mBigImageUrl;
     private final String mSmallImageUrl;
     private final String mPreviewUrl;
+    private final String mSpotifyUrl;
 
     public TrackViewModel(Track track) {
         AlbumSimple album = track.album;
@@ -29,6 +30,7 @@ public class TrackViewModel implements Parcelable {
         mBigImageUrl = SpotifyImageHelper.getBestImageUrl(album.images, Constants.COVER_IMAGE_SIZE);
         mSmallImageUrl = SpotifyImageHelper.getBestImageUrl(album.images, Constants.LIST_IMAGE_SIZE);
         mPreviewUrl = track.preview_url;
+        mSpotifyUrl = track.external_urls.get("spotify");
     }
 
     private TrackViewModel(Parcel in) {
@@ -38,6 +40,7 @@ public class TrackViewModel implements Parcelable {
         mBigImageUrl = in.readString();
         mSmallImageUrl = in.readString();
         mPreviewUrl = in.readString();
+        mSpotifyUrl = in.readString();
     }
 
     public static final Creator<TrackViewModel> CREATOR = new Creator<TrackViewModel>() {
@@ -65,6 +68,7 @@ public class TrackViewModel implements Parcelable {
         dest.writeString(mBigImageUrl);
         dest.writeString(mSmallImageUrl);
         dest.writeString(mPreviewUrl);
+        dest.writeString(mSpotifyUrl);
     }
 
     public String getId() {
@@ -89,5 +93,9 @@ public class TrackViewModel implements Parcelable {
 
     public String getPreviewUrl() {
         return mPreviewUrl;
+    }
+
+    public String getSpotifyUrl() {
+        return mSpotifyUrl;
     }
 }
