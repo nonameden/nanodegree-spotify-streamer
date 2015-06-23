@@ -110,7 +110,7 @@ public class MediaNotificationManager extends BroadcastReceiver {
             // The notification must be updated after setting started to true
             Notification notification = createNotification();
             if (notification != null) {
-                mController.registerCallback(mCb);
+                mController.registerCallback(mCallback);
                 IntentFilter filter = new IntentFilter();
                 filter.addAction(ACTION_PLAY);
                 filter.addAction(ACTION_PAUSE);
@@ -131,7 +131,7 @@ public class MediaNotificationManager extends BroadcastReceiver {
     public void stopNotification() {
         if (mStarted) {
             mStarted = false;
-            mController.unregisterCallback(mCb);
+            mController.unregisterCallback(mCallback);
             try {
                 mNotificationManager.cancel(NOTIFICATION_ID);
                 mService.unregisterReceiver(this);
@@ -152,13 +152,13 @@ public class MediaNotificationManager extends BroadcastReceiver {
             MediaSessionCompat.Token freshToken = mService.getSessionToken();
             if (mSessionToken == null || !mSessionToken.equals(freshToken)) {
                 if (mController != null) {
-                    mController.unregisterCallback(mCb);
+                    mController.unregisterCallback(mCallback);
                 }
                 mSessionToken = freshToken;
                 mController = new MediaControllerCompat(mService, mSessionToken);
                 mTransportControls = mController.getTransportControls();
                 if (mStarted) {
-                    mController.registerCallback(mCb);
+                    mController.registerCallback(mCallback);
                 }
             }
         } catch (RemoteException e) {
@@ -205,7 +205,7 @@ public class MediaNotificationManager extends BroadcastReceiver {
                 .setSmallIcon(R.drawable.ic_stat_headset)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setUsesChronometer(false)
-                .setContentIntent(createContentIntent(description))
+                .setContentIntent(createContentIntent(mMetadata))
                 .setContentTitle(description.getTitle())
                 .setContentText(description.getSubtitle())
                 .setLargeIcon(art);
@@ -272,17 +272,17 @@ public class MediaNotificationManager extends BroadcastReceiver {
         builder.setOngoing(mPlaybackState.getState() == PlaybackStateCompat.STATE_PLAYING);
     }
 
-    private PendingIntent createContentIntent(MediaDescriptionCompat description) {
-        Intent openUI = new Intent(mService, PlayerActivity.class);
-        openUI.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        if (description != null) {
-            openUI.putExtra(PlayerActivity.EXTRA_CURRENT_MEDIA_DESCRIPTION, description);
+    private PendingIntent createContentIntent(MediaMetadataCompat metadata) {
+        Intent intent = new Intent(mService, PlayerActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        if (metadata != null) {
+            intent.putExtra(PlayerActivity.EXTRA_CURRENT_MEDIA_METADATA, metadata);
         }
-        return PendingIntent.getActivity(mService, REQUEST_CODE, openUI,
+        return PendingIntent.getActivity(mService, REQUEST_CODE, intent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
-    private final MediaControllerCompat.Callback mCb = new MediaControllerCompat.Callback() {
+    private final MediaControllerCompat.Callback mCallback = new MediaControllerCompat.Callback() {
         @Override
         public void onPlaybackStateChanged(PlaybackStateCompat state) {
             mPlaybackState = state;

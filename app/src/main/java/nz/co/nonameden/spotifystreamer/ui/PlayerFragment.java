@@ -120,7 +120,7 @@ public class PlayerFragment extends BaseFragment<MediaProvider> {
         outState.putParcelable(ARG_VIEW_MODEL, mViewModel);
     }
 
-    private void onMetadataChanged(MediaMetadataCompat metadata) {
+    public void onMetadataChanged(MediaMetadataCompat metadata) {
         if(metadata != null) {
             mViewModel.updateFromMetadata(metadata);
         }

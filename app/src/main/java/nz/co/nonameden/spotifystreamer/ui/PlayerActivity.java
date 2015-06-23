@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,13 +21,12 @@ import nz.co.nonameden.spotifystreamer.ui.base.BaseActivity;
  */
 public class PlayerActivity extends BaseActivity {
 
-    public static final String EXTRA_CURRENT_MEDIA_DESCRIPTION = "extra-media-description";
+    public static final String EXTRA_CURRENT_MEDIA_METADATA = "extra-media-metadata";
 
     @InjectView(R.id.toolbar)
     Toolbar mToolbar;
 
     private PlayerFragment mPlayerFragment;
-    private ShareActionProvider mShareActionProvider;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,6 +48,11 @@ public class PlayerActivity extends BaseActivity {
         }
 
         mPlayerFragment = (PlayerFragment) getFragmentManager().findFragmentById(R.id.player);
+        Bundle extras = getIntent().getExtras();
+        if(extras.containsKey(EXTRA_CURRENT_MEDIA_METADATA)) {
+            MediaMetadataCompat metadata = extras.getParcelable(EXTRA_CURRENT_MEDIA_METADATA);
+            mPlayerFragment.onMetadataChanged(metadata);
+        }
     }
 
     @Override
