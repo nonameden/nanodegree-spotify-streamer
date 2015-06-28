@@ -5,4 +5,11 @@
         android:title="@string/settings_spotify_country"
         android:summary="@string/settings_spotify_country_summary"
         android:defaultValue="@string/default_country" />
+
+    <SwitchPreference
+        android:key="@string/key_lockscreen_controls"
+        android:title="@string/settings_lockscreen_controls"
+        android:summary="@string/settings_lockscreen_controls_summary"
+        android:defaultValue="true" />
+
 </PreferenceScreen>

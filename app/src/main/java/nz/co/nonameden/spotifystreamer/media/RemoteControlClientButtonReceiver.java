@@ -20,10 +20,10 @@ public class RemoteControlClientButtonReceiver extends BroadcastReceiver {
             if (event != null && event.getAction() == KeyEvent.ACTION_UP) {
                 switch(event.getKeyCode()) {
                     case KeyEvent.KEYCODE_MEDIA_PAUSE:
-                        onAction(context, MusicPlayerService.CMD_PAUSE);
+                        onAction(context, MusicPlayerService.CMD_PLAY_PAUSE);
                         break;
-                    case KeyEvent.KEYCODE_MEDIA_PLAY:
-                        onAction(context, MusicPlayerService.CMD_PLAY);
+                    case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+                        onAction(context, MusicPlayerService.CMD_PLAY_PAUSE);
                         break;
                     case KeyEvent.KEYCODE_MEDIA_NEXT:
                         onAction(context, MusicPlayerService.CMD_NEXT);

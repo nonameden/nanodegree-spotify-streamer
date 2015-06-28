@@ -31,4 +31,7 @@
     <string name="action_share">Share</string>
     <string name="title_share_with">Share with…</string>
     <string name="action_now_playing">Now Playing</string>
+    <string name="key_lockscreen_controls">pref_lockscreen_controls</string>
+    <string name="settings_lockscreen_controls">Lockscreen Controls</string>
+    <string name="settings_lockscreen_controls_summary">Show or hide playback controls from lockscreen</string>
 </resources>

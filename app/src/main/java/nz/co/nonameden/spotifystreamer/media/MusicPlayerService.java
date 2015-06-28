@@ -46,15 +46,14 @@ public class MusicPlayerService extends MediaBrowserServiceCompat implements Pla
     // should be executed (see {@link #onStartCommand})
     public static final String CMD_NAME = "CMD_NAME";
 
-    public static final String CMD_PAUSE = "CMD_PAUSE";
-    public static final String CMD_PLAY = "CMD_PLAY";
+    public static final String CMD_PLAY_PAUSE = "CMD_PLAY_PAUSE";
     public static final String CMD_NEXT = "CMD_NEXT";
     public static final String CMD_PREV = "CMD_PREV";
 
     /**
      * @hide
      */
-    @StringDef({CMD_PAUSE, CMD_PLAY, CMD_NEXT, CMD_PREV})
+    @StringDef({CMD_PLAY_PAUSE, CMD_NEXT, CMD_PREV})
     public @interface Commands {}
 
     private final DelayedStopHandler mDelayedStopHandler = new DelayedStopHandler(this);
@@ -106,10 +105,18 @@ public class MusicPlayerService extends MediaBrowserServiceCompat implements Pla
             String action = startIntent.getAction();
             String command = startIntent.getStringExtra(CMD_NAME);
             if (ACTION_CMD.equals(action)) {
-                if (CMD_PAUSE.equals(command)) {
-                    if (mPlayback != null && mPlayback.isPlaying()) {
-                        handlePauseRequest();
+                if (CMD_PLAY_PAUSE.equals(command)) {
+                    if (mPlayback != null) {
+                        if(mPlayback.isPlaying()) {
+                            handlePauseRequest();
+                        } else {
+                            handlePlayRequest();
+                        }
                     }
+                } else if(CMD_PREV.equals(command)) {
+                    handlePrevRequest();
+                } else if(CMD_NEXT.equals(command)) {
+                    handleNextRequest();
                 }
             }
         }
@@ -218,32 +225,12 @@ public class MusicPlayerService extends MediaBrowserServiceCompat implements Pla
 
         @Override
         public void onSkipToNext() {
-            mCurrentIndexOnQueue++;
-            if (mPlayingQueue != null && mCurrentIndexOnQueue >= mPlayingQueue.size()) {
-                // This sample's behavior: skipping to next when in last song returns to the
-                // first song.
-                mCurrentIndexOnQueue = 0;
-            }
-            if (QueueHelper.isIndexPlayable(mCurrentIndexOnQueue, mPlayingQueue)) {
-                handlePlayRequest();
-            } else {
-                handleStopRequest("Cannot skip");
-            }
+            handleNextRequest();
         }
 
         @Override
         public void onSkipToPrevious() {
-            mCurrentIndexOnQueue--;
-            if (mPlayingQueue != null && mCurrentIndexOnQueue < 0) {
-                // This sample's behavior: skipping to previous when in first song restarts the
-                // first song.
-                mCurrentIndexOnQueue = 0;
-            }
-            if (QueueHelper.isIndexPlayable(mCurrentIndexOnQueue, mPlayingQueue)) {
-                handlePlayRequest();
-            } else {
-                handleStopRequest("Cannot skip");
-            }
+            handlePrevRequest();
         }
 
         @Override
@@ -288,6 +275,34 @@ public class MusicPlayerService extends MediaBrowserServiceCompat implements Pla
         if (QueueHelper.isIndexPlayable(mCurrentIndexOnQueue, mPlayingQueue)) {
             updateMetadata();
             mPlayback.play(mPlayingQueue.get(mCurrentIndexOnQueue));
+        }
+    }
+
+    private void handleNextRequest() {
+        mCurrentIndexOnQueue++;
+        if (mPlayingQueue != null && mCurrentIndexOnQueue >= mPlayingQueue.size()) {
+            // This sample's behavior: skipping to next when in last song returns to the
+            // first song.
+            mCurrentIndexOnQueue = 0;
+        }
+        if (QueueHelper.isIndexPlayable(mCurrentIndexOnQueue, mPlayingQueue)) {
+            handlePlayRequest();
+        } else {
+            handleStopRequest("Cannot skip");
+        }
+    }
+
+    private void handlePrevRequest() {
+        mCurrentIndexOnQueue--;
+        if (mPlayingQueue != null && mCurrentIndexOnQueue < 0) {
+            // This sample's behavior: skipping to previous when in first song restarts the
+            // first song.
+            mCurrentIndexOnQueue = 0;
+        }
+        if (QueueHelper.isIndexPlayable(mCurrentIndexOnQueue, mPlayingQueue)) {
+            handlePlayRequest();
+        } else {
+            handleStopRequest("Cannot skip");
         }
     }
 
