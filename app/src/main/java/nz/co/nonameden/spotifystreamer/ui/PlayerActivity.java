@@ -4,15 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import java.util.Locale;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import nz.co.nonameden.spotifystreamer.R;
 import nz.co.nonameden.spotifystreamer.ui.base.BaseActivity;
 
@@ -22,10 +19,6 @@ import nz.co.nonameden.spotifystreamer.ui.base.BaseActivity;
 public class PlayerActivity extends BaseActivity {
 
     public static final String EXTRA_CURRENT_MEDIA_METADATA = "extra-media-metadata";
-
-    @InjectView(R.id.toolbar)
-    Toolbar mToolbar;
-
     private PlayerFragment mPlayerFragment;
 
     @Override
@@ -38,14 +31,6 @@ public class PlayerActivity extends BaseActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-
-        setSupportActionBar(mToolbar);
-
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowTitleEnabled(false);
-        }
 
         mPlayerFragment = (PlayerFragment) getFragmentManager().findFragmentById(R.id.player);
         Bundle extras = getIntent().getExtras();

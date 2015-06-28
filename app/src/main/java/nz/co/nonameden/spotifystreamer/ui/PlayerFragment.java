@@ -12,7 +12,9 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.AppCompatDialog;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
@@ -47,6 +49,9 @@ public class PlayerFragment extends BaseFragment<MediaProvider> {
     @InjectView(R.id.seek_bar)
     SeekBar mSeekBar;
 
+    @InjectView(R.id.toolbar)
+    Toolbar mToolbar;
+
     private FragmentPlayerBinding mDataBinder;
     private NowPlayingViewModel mViewModel;
     private ScheduledFuture<?> mScheduleFuture;
@@ -79,6 +84,24 @@ public class PlayerFragment extends BaseFragment<MediaProvider> {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mToolbar.inflateMenu(R.menu.menu_share);
+        mToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(getDialog()!=null) {
+                    dismiss();
+                } else {
+                    getActivity().onBackPressed();
+                }
+            }
+        });
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                return getActivity().onOptionsItemSelected(item);
+            }
+        });
         mSeekBar.setOnSeekBarChangeListener(mSeekBarListener);
     }
 

@@ -64,8 +64,8 @@
             android:id="@+id/progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/default_space"
             android:visibility="@{track.loadingInProgress ? View.VISIBLE : View.INVISIBLE}"/>
 
@@ -163,6 +163,15 @@
                 android:visibility="@{track.skipNextVisible ? View.VISIBLE : View.INVISIBLE}"/>
 
         </LinearLayout>
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/dark_bottom_shadow"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
     </RelativeLayout>
 </layout>
