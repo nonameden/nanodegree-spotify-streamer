@@ -1,8 +1,9 @@
 package nz.co.nonameden.spotifystreamer.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+
+import java.util.ArrayList;
 
 import nz.co.nonameden.spotifystreamer.R;
 import nz.co.nonameden.spotifystreamer.infrastructure.models.ArtistViewModel;
@@ -20,7 +21,7 @@ public class TopTracksActivity extends BaseActivity
     private ArtistViewModel mArtist;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Just because in feature stage we gonna support tablet with 2-pane
@@ -40,14 +41,7 @@ public class TopTracksActivity extends BaseActivity
     }
 
     @Override
-    public void onTrackClicked(TrackViewModel track) {
-        Intent intent = new Intent(this, PlayerActivity.class);
-        startActivity(intent);
-    }
-
-    @Override
-    public void finish() {
-        super.finish();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    public void onTrackClicked(ArrayList<TrackViewModel> tracks, int position) {
+        onPlayClicked(mArtist, tracks, position);
     }
 }

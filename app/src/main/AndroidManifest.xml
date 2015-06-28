@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="nz.co.nonameden.spotifystreamer" >
+          xmlns:tools="http://schemas.android.com/tools"
+          package="nz.co.nonameden.spotifystreamer">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +13,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".ui.ArtistSearchActivity"
-            android:label="@string/title_activity_spotify" >
+            android:label="@string/title_activity_spotify"
+            android:windowSoftInputMode="adjustPan|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,7 +43,26 @@
 
         <activity
             android:name=".ui.PlayerActivity"
-            android:label="@string/title_player"/>
+            android:label="@string/title_player"
+            android:theme="@style/AppTheme.Fullscreen"/>
+
+        <service
+            android:name=".media.MusicPlayerService"
+            android:exported="true"
+            tools:ignore="ExportedService"
+            android:stopWithTask="true">
+            <intent-filter>
+                <action android:name="android.media.browse.MediaBrowserService"/>
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name=".media.RemoteControlClientButtonReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="nz.co.nonameden.spotifystreamer.ACTION_MEDIA_BUTTONS"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 

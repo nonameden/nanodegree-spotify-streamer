@@ -1,13 +1,7 @@
 package nz.co.nonameden.spotifystreamer.infrastructure.models;
 
-import android.databinding.BindingAdapter;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.widget.ImageView;
-
-import com.squareup.picasso.Picasso;
 
 import kaaes.spotify.webapi.android.models.AlbumSimple;
 import kaaes.spotify.webapi.android.models.Track;
@@ -25,6 +19,7 @@ public class TrackViewModel implements Parcelable {
     private final String mBigImageUrl;
     private final String mSmallImageUrl;
     private final String mPreviewUrl;
+    private final String mSpotifyUrl;
 
     public TrackViewModel(Track track) {
         AlbumSimple album = track.album;
@@ -35,6 +30,7 @@ public class TrackViewModel implements Parcelable {
         mBigImageUrl = SpotifyImageHelper.getBestImageUrl(album.images, Constants.COVER_IMAGE_SIZE);
         mSmallImageUrl = SpotifyImageHelper.getBestImageUrl(album.images, Constants.LIST_IMAGE_SIZE);
         mPreviewUrl = track.preview_url;
+        mSpotifyUrl = track.external_urls.get("spotify");
     }
 
     private TrackViewModel(Parcel in) {
@@ -44,6 +40,7 @@ public class TrackViewModel implements Parcelable {
         mBigImageUrl = in.readString();
         mSmallImageUrl = in.readString();
         mPreviewUrl = in.readString();
+        mSpotifyUrl = in.readString();
     }
 
     public static final Creator<TrackViewModel> CREATOR = new Creator<TrackViewModel>() {
@@ -71,6 +68,7 @@ public class TrackViewModel implements Parcelable {
         dest.writeString(mBigImageUrl);
         dest.writeString(mSmallImageUrl);
         dest.writeString(mPreviewUrl);
+        dest.writeString(mSpotifyUrl);
     }
 
     public String getId() {
@@ -97,11 +95,7 @@ public class TrackViewModel implements Parcelable {
         return mPreviewUrl;
     }
 
-    @BindingAdapter({"bind:image"})
-    public static void loadImage(ImageView view, String url) {
-        Picasso.with(view.getContext())
-                .load(url)
-                .placeholder(new ColorDrawable(Color.GRAY))
-                .into(view);
+    public String getSpotifyUrl() {
+        return mSpotifyUrl;
     }
 }

@@ -1,13 +1,8 @@
 package nz.co.nonameden.spotifystreamer.infrastructure.models;
 
-import android.databinding.BindingAdapter;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.widget.ImageView;
-
-import com.squareup.picasso.Picasso;
+import android.support.annotation.NonNull;
 
 import kaaes.spotify.webapi.android.models.Artist;
 import nz.co.nonameden.spotifystreamer.infrastructure.shared.Constants;
@@ -70,11 +65,12 @@ public class ArtistViewModel implements Parcelable {
         return mImageUrl;
     }
 
-    @BindingAdapter({"bind:image"})
-    public static void loadImage(ImageView view, String url) {
-        Picasso.with(view.getContext())
-                .load(url)
-                .placeholder(new ColorDrawable(Color.GRAY))
-                .into(view);
+    @Override
+    public boolean equals(@NonNull Object o) {
+        if(o instanceof ArtistViewModel) {
+            ArtistViewModel other = (ArtistViewModel) o;
+            return mId.equals(other.mId);
+        }
+        return false;
     }
 }

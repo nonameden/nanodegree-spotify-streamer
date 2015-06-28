@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
 import nz.co.nonameden.spotifystreamer.R;
 import nz.co.nonameden.spotifystreamer.infrastructure.models.ArtistViewModel;
 import nz.co.nonameden.spotifystreamer.infrastructure.models.TrackViewModel;
@@ -13,13 +15,21 @@ import nz.co.nonameden.spotifystreamer.ui.base.BaseActivity;
 public class ArtistSearchActivity extends BaseActivity
         implements ArtistSearchFragment.Callback, TopTracksFragment.Callback {
 
+    private static final String EXTRA_ARTIST = "extra-artist";
+
+    private ArtistViewModel mArtist;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_artist_search);
 
+        if(savedInstanceState != null) {
+            mArtist = savedInstanceState.getParcelable(EXTRA_ARTIST);
+        }
+
         TopTracksFragment topTracksFragment = getTopTracksFragment();
-        if(topTracksFragment !=null) {
+        if(topTracksFragment != null) {
             topTracksFragment.setTabletMode(true);
             getSearchFragment().setTabletMode(true);
         }
@@ -42,6 +52,12 @@ public class ArtistSearchActivity extends BaseActivity
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(EXTRA_ARTIST, mArtist);
+    }
+
     private void onSettingsClicked() {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
@@ -49,12 +65,12 @@ public class ArtistSearchActivity extends BaseActivity
 
     @Override
     public void onArtistClicked(ArtistViewModel artist) {
+        mArtist = artist;
         TopTracksFragment tracksFragment = getTopTracksFragment();
         if(tracksFragment == null) {
             Intent intent = new Intent(this, TopTracksActivity.class);
             intent.putExtra(TopTracksActivity.EXTRA_ARTIST, artist);
             startActivity(intent);
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         } else {
             tracksFragment.setArtistId(artist.getId());
         }
@@ -69,8 +85,17 @@ public class ArtistSearchActivity extends BaseActivity
     }
 
     @Override
-    public void onTrackClicked(TrackViewModel track) {
-        Intent intent = new Intent(this, PlayerActivity.class);
-        startActivity(intent);
+    public void onTrackClicked(ArrayList<TrackViewModel> tracks, int position) {
+        onPlayClicked(mArtist, tracks, position);
+    }
+
+    @Override
+    protected void onMediaControllerConnected() {
+        super.onMediaControllerConnected();
+
+        PlayerFragment playerFragment = (PlayerFragment) getFragmentManager().findFragmentByTag(TAG_PLAYER);
+        if(playerFragment!=null) {
+            playerFragment.onConnected();
+        }
     }
 }

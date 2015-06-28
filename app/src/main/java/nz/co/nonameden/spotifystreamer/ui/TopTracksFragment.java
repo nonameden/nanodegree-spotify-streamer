@@ -91,7 +91,7 @@ public class TopTracksFragment extends BaseFragment<TopTracksFragment.Callback>
     protected Callback initStubCallback() {
         return new Callback() {
             @Override
-            public void onTrackClicked(TrackViewModel track) {}
+            public void onTrackClicked(ArrayList<TrackViewModel> tracks, int position) {}
         };
     }
 
@@ -137,11 +137,10 @@ public class TopTracksFragment extends BaseFragment<TopTracksFragment.Callback>
 
     @OnItemClick(R.id.list)
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        TrackViewModel track = mAdapter.getItem(position);
-        getCallback().onTrackClicked(track);
+        getCallback().onTrackClicked(mAdapter.getItems(), position);
     }
 
     public interface Callback {
-        void onTrackClicked(TrackViewModel track);
+        void onTrackClicked(ArrayList<TrackViewModel> tracks, int position);
     }
 }

@@ -23,4 +23,12 @@
     <string name="unknown_error">Unknown error. Please try again later.</string>
     <string name="lbl_no_tracks">Artist doesn\'t have top tracks</string>
     <string name="title_player">Player</string>
+    <string name="label_pause">Pause</string>
+    <string name="label_play">Play</string>
+    <string name="label_previous">Previous</string>
+    <string name="label_next">Next</string>
+    <string name="error_no_metadata">Unable to retrieve metadata.</string>
+    <string name="action_share">Share</string>
+    <string name="title_share_with">Share with…</string>
+    <string name="action_now_playing">Now Playing</string>
 </resources>

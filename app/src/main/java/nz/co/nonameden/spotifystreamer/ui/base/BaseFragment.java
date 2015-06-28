@@ -1,7 +1,7 @@
 package nz.co.nonameden.spotifystreamer.ui.base;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.View;
 
@@ -10,7 +10,7 @@ import butterknife.ButterKnife;
 /**
  * Created by nonameden on 3/06/15.
  */
-public abstract class BaseFragment<T> extends Fragment {
+public abstract class BaseFragment<T> extends DialogFragment {
 
     private final T STUB_CALLBACK = initStubCallback();
     private T mCallback = STUB_CALLBACK;
@@ -41,6 +41,12 @@ public abstract class BaseFragment<T> extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.inject(this, view);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
     }
 
     @Override
