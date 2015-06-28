@@ -1,14 +1,17 @@
 package nz.co.nonameden.spotifystreamer.ui;
 
+import android.app.Dialog;
 import android.databinding.DataBindingUtil;
 import android.media.session.PlaybackState;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.support.v7.app.AppCompatDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +62,11 @@ public class PlayerFragment extends BaseFragment<MediaProvider> {
         }
     }
 
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return new AppCompatDialog(getActivity(), R.style.AppTheme_Dialog);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -72,6 +80,13 @@ public class PlayerFragment extends BaseFragment<MediaProvider> {
         super.onViewCreated(view, savedInstanceState);
 
         mSeekBar.setOnSeekBarChangeListener(mSeekBarListener);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        stopSeekBarUpdate();
     }
 
     @Override
@@ -115,7 +130,7 @@ public class PlayerFragment extends BaseFragment<MediaProvider> {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(ARG_VIEW_MODEL, mViewModel);
     }
@@ -130,7 +145,7 @@ public class PlayerFragment extends BaseFragment<MediaProvider> {
         mLastPlaybackState = playbackState;
         mViewModel.setPlaybackState(playbackState);
 
-        if(playbackState.getState() == PlaybackStateCompat.STATE_PLAYING) {
+        if(playbackState!=null && playbackState.getState() == PlaybackStateCompat.STATE_PLAYING) {
             scheduleSeekBarUpdate();
         } else {
             stopSeekBarUpdate();

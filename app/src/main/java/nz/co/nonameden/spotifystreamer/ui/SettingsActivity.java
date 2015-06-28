@@ -16,7 +16,7 @@ public class SettingsActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.spotify_settings);
+        setContentView(R.layout.activity_settings);
     }
 
     public static class SettingsFragment extends PreferenceFragment {

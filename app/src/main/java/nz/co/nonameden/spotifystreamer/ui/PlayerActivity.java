@@ -49,7 +49,7 @@ public class PlayerActivity extends BaseActivity {
 
         mPlayerFragment = (PlayerFragment) getFragmentManager().findFragmentById(R.id.player);
         Bundle extras = getIntent().getExtras();
-        if(extras.containsKey(EXTRA_CURRENT_MEDIA_METADATA)) {
+        if(extras!=null && extras.containsKey(EXTRA_CURRENT_MEDIA_METADATA)) {
             MediaMetadataCompat metadata = extras.getParcelable(EXTRA_CURRENT_MEDIA_METADATA);
             mPlayerFragment.onMetadataChanged(metadata);
         }
@@ -72,13 +72,18 @@ public class PlayerActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected boolean isNowPlayingAvailable() {
+        return false;
+    }
+
     private void onShareClicked() {
         MediaControllerCompat controller = getMediaControllerCompat();
         if(controller != null) {
             MediaMetadataCompat metadata = controller.getMetadata();
             if(metadata != null) {
                 // Unfortunately Media Compat implementation still contains bug, custom fields in
-                // Metadata will be not passed back to UI through Session =( so we can not take spotify url
+                // Metadata will be not passed back to UI through Session Compat =(
                 // so lets us template for external url
 
                 String artistName = metadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST);

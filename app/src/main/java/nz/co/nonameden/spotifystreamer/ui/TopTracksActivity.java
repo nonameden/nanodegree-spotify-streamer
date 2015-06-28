@@ -1,6 +1,5 @@
 package nz.co.nonameden.spotifystreamer.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 
@@ -9,7 +8,6 @@ import java.util.ArrayList;
 import nz.co.nonameden.spotifystreamer.R;
 import nz.co.nonameden.spotifystreamer.infrastructure.models.ArtistViewModel;
 import nz.co.nonameden.spotifystreamer.infrastructure.models.TrackViewModel;
-import nz.co.nonameden.spotifystreamer.media.QueueHelper;
 import nz.co.nonameden.spotifystreamer.ui.base.BaseActivity;
 
 
@@ -44,11 +42,6 @@ public class TopTracksActivity extends BaseActivity
 
     @Override
     public void onTrackClicked(ArrayList<TrackViewModel> tracks, int position) {
-        Intent intent = new Intent(this, PlayerActivity.class);
-        startActivity(intent);
-
-        Bundle bundle = QueueHelper.createBundle(mArtist, tracks);
-        TrackViewModel track = tracks.get(position);
-        getMediaControllerCompat().getTransportControls().playFromMediaId(track.getId(), bundle);
+        onPlayClicked(mArtist, tracks, position);
     }
 }

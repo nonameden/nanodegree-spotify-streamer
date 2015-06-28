@@ -1,6 +1,10 @@
 package nz.co.nonameden.spotifystreamer.ui.base;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.ComponentName;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v4.media.MediaMetadataCompat;
@@ -8,17 +12,28 @@ import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
 import butterknife.ButterKnife;
+import nz.co.nonameden.spotifystreamer.R;
+import nz.co.nonameden.spotifystreamer.infrastructure.models.ArtistViewModel;
+import nz.co.nonameden.spotifystreamer.infrastructure.models.TrackViewModel;
 import nz.co.nonameden.spotifystreamer.media.MusicPlayerService;
+import nz.co.nonameden.spotifystreamer.media.QueueHelper;
 import nz.co.nonameden.spotifystreamer.media.compat.MediaBrowserCompat;
 import nz.co.nonameden.spotifystreamer.media.compat.MediaProvider;
+import nz.co.nonameden.spotifystreamer.ui.PlayerActivity;
+import nz.co.nonameden.spotifystreamer.ui.PlayerFragment;
 
 /**
  * Created by nonameden on 6/06/15.
  */
 public abstract class BaseActivity extends AppCompatActivity implements MediaProvider {
+
+    protected static final String TAG_PLAYER = "player";
 
     private MediaBrowserCompat mMediaBrowser;
     private MediaControllerCompat mMediaController;
@@ -42,14 +57,19 @@ public abstract class BaseActivity extends AppCompatActivity implements MediaPro
     protected void onStart() {
         super.onStart();
 
-//        mControlsFragment = (PlaybackControlsFragment) getFragmentManager()
-//                .findFragmentById(R.id.fragment_playback_controls);
-//        if (mControlsFragment == null) {
-//            throw new IllegalStateException("Missing fragment with id 'controls'. Cannot continue.");
-//        }
-        hidePlaybackControls();
-
         mMediaBrowser.connect();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if(shouldShowNowPlaying() && isNowPlayingAvailable()) {
+            getMenuInflater().inflate(R.menu.menu_now_playing, menu);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    protected boolean isNowPlayingAvailable() {
+        return true;
     }
 
     @Override
@@ -75,23 +95,7 @@ public abstract class BaseActivity extends AppCompatActivity implements MediaPro
         // empty implementation, can be overridden by clients.
     }
 
-    protected void showPlaybackControls() {
-//        if (NetworkHelper.isOnline(this)) {
-//            mControlsFragment.showPlaybackControls();
-//        }
-    }
-
-    protected void hidePlaybackControls() {
-//        mControlsFragment.hidePlaybackControls();
-    }
-
-    /**
-     * Check if the MediaSession is active and in a "playback-able" state
-     * (not NONE and not STOPPED).
-     *
-     * @return true if the MediaSession's state requires playback controls to be visible.
-     */
-    protected boolean shouldShowControls() {
+    protected boolean shouldShowNowPlaying() {
         return !(mMediaController == null ||
                 mMediaController.getMetadata() == null ||
                 mMediaController.getPlaybackState() == null);
@@ -102,15 +106,7 @@ public abstract class BaseActivity extends AppCompatActivity implements MediaPro
             mMediaController = new MediaControllerCompat(this, token);
             mMediaController.registerCallback(mMediaControllerCallback);
 
-            if (shouldShowControls()) {
-                showPlaybackControls();
-            } else {
-                hidePlaybackControls();
-            }
-
-//            if (mControlsFragment != null) {
-//                mControlsFragment.onConnected();
-//            }
+            invalidateOptionsMenu();
 
             onMediaControllerConnected();
 
@@ -124,20 +120,12 @@ public abstract class BaseActivity extends AppCompatActivity implements MediaPro
             new MediaControllerCompat.Callback() {
                 @Override
                 public void onPlaybackStateChanged(PlaybackStateCompat state) {
-                    if (shouldShowControls()) {
-                        showPlaybackControls();
-                    } else {
-                        hidePlaybackControls();
-                    }
+                    invalidateOptionsMenu();
                 }
 
                 @Override
                 public void onMetadataChanged(MediaMetadataCompat metadata) {
-                    if (shouldShowControls()) {
-                        showPlaybackControls();
-                    } else {
-                        hidePlaybackControls();
-                    }
+                    invalidateOptionsMenu();
                 }
             };
 
@@ -156,8 +144,36 @@ public abstract class BaseActivity extends AppCompatActivity implements MediaPro
             case android.R.id.home:
                 onBackPressed();
                 return true;
+            case R.id.action_now_playing:
+                onNowPlayingClicked();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    protected void onPlayClicked(ArtistViewModel artist, ArrayList<TrackViewModel> tracks, int position) {
+        Bundle bundle = QueueHelper.createBundle(artist, tracks);
+        TrackViewModel track = tracks.get(position);
+        getMediaControllerCompat().getTransportControls().playFromMediaId(track.getId(), bundle);
+
+        onNowPlayingClicked();
+    }
+
+    protected void onNowPlayingClicked() {
+        boolean isTablet = getResources().getBoolean(R.bool.is_tablet);
+        if(isTablet) {
+            // To avoid double tap
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            Fragment playerFragment = fragmentManager.findFragmentByTag(TAG_PLAYER);
+            if(playerFragment!=null) {
+                transaction.remove(playerFragment);
+            }
+            new PlayerFragment().show(transaction, TAG_PLAYER);
+        } else {
+            Intent intent = new Intent(this, PlayerActivity.class);
+            startActivity(intent);
         }
     }
 }
